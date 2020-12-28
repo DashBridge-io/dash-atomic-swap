@@ -66,7 +66,7 @@ var question = function(q) {
     }
       
     function fail(error) {
-        console.error("Address failed. Is the config settings correct? - " + error.error);
+        console.error("Address failed. Is the config settings correct? - " + error);
     }
 
     //Now get public key
@@ -157,7 +157,7 @@ var question = function(q) {
     }
       
     function fail6(error) {
-        console.error("fundingTxID failed - " + error.error);
+        console.error("fundingTxID failed - " + JSON.stringify(error));
     }
 
     await rpc.getrawtransaction(fundingTxId, 1)
@@ -203,7 +203,7 @@ var question = function(q) {
     }
       
     function fail8(error) {
-        console.error("Sendrawtransaction failed - " + error.error);
+        console.error("Sendrawtransaction failed - " + JSON.stringify(error));
     }
     
     cl.close();
