@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@dashevo/dashcore-lib": "^0.18.15",
+    "@dashevo/dashd-rpc": "2.0.0",
     "mocha": "^7.2.0",
     "chai": "^4.2.0",
     "sinon": "^4.5.0"
