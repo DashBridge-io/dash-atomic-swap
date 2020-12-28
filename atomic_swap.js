@@ -23,7 +23,6 @@ function getSecret() {
     }
 }
 
-var readln = require('readline');
 const PublicKey = require('@dashevo/dashcore-lib/lib/publickey');
 const AtomicSwapRedeemScript = require('./lib/AtomicSwapRedeemScript');
 const AtomicSwapRedeemTransaction = require('./lib/AtomicSwapRedeemTransaction');
@@ -42,9 +41,6 @@ const AtomicSwapUnlockingScript = require('./lib/AtomicSwapUnlockingScript');
     var initiatorPubKeyString;
     var fundingTxId;
     var fundingTxOutputIdx;
-    var fundingTxScriptPubKeyString;
-    var fundingTxScriptPubKey;
-
 
     var rpc = new RpcClient(config);
 
@@ -147,11 +143,8 @@ const AtomicSwapUnlockingScript = require('./lib/AtomicSwapUnlockingScript');
     .then(suc7, fail7);
 
     function suc7(result) {
-        console.log("\n\n The Index is: " + result.result.vout[0].n);
-        console.log("\n\n The pubkey script hex is: " + result.result.hex + "\n\n");
+        console.log("\n\nThe Index is: " + result.result.vout[0].n);
         fundingTxOutputIdx = result.result.vout[0].n;
-        fundingTxScriptPubKeyString = result.result.hex;
-        fundingTxScriptPubKey = Script.fromHex(fundingTxScriptPubKeyString);
     }
       
     function fail7(error) {
@@ -161,7 +154,7 @@ const AtomicSwapUnlockingScript = require('./lib/AtomicSwapUnlockingScript');
     var redeemTx = new AtomicSwapRedeemTransaction(
         swapAddress, fundingTxId, fundingTxOutputIdx, 1000000000-500, toAddress
     )
-    var sig = redeemTx.getSignature(privKey, fundingTxScriptPubKeyString);
+    var sig = redeemTx.getSignature(privKey, redeemScr);
     console.log("Signature: " + sig.toString());
 
     let unlockingScript = new AtomicSwapUnlockingScript(secret.secret, redeemScr, sig);
@@ -176,16 +169,10 @@ const AtomicSwapUnlockingScript = require('./lib/AtomicSwapUnlockingScript');
     .then(suc8, fail8);
 
     function suc8(result) {
-        console.log("\n\n The returned from the send transaction is: " + result.result);
+        console.log("\n\nThe returned from the send transaction is: " + result.result);
     }
       
     function fail8(error) {
         console.error("Sendrawtransaction failed - " + JSON.stringify(error));
     }
 })();
-
-
-// var pubKeyParticipant = '032a90617b3d14645bb0db5ac303c87ff4953ea7ecb2403430dd81375a2d69aeac';
-// // var pubKeyInitiator = '0315a66994d646c76278b2c4731448cfbe85c4b09d7fdc7f073246b4985409f1ce';
-
-
