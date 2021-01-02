@@ -1,8 +1,11 @@
+'use strict';
+
 const dashcore = require('@dashevo/dashcore-lib');
-const Address = require('@dashevo/dashcore-lib/lib/address');
-const Script = require('@dashevo/dashcore-lib/lib/script');
+const Address = dashcore.Address;
+const Script = dashcore.Script;
+const Opcode = dashcore.Opcode;
+
 const { sha256 } = require('@dashevo/dashcore-lib/lib/crypto/hash');
-const Opcode = require('@dashevo/dashcore-lib/lib/opcode');
 var RpcClient = require('@dashevo/dashd-rpc/promise');
 
 var config = {
@@ -14,7 +17,7 @@ var config = {
 };
 
 function getSecret() {
-    secret = dashcore.crypto.Random.getRandomBuffer(32);
+    const secret = dashcore.crypto.Random.getRandomBuffer(32);
     const hash = sha256(secret);
 
     return {
@@ -121,7 +124,7 @@ const AtomicSwapUnlockingScript = require('./lib/AtomicSwapUnlockingScript');
     console.log(secret);
     var redeemScr = new AtomicSwapRedeemScript(secret.hash, participantPubKey, initiatorPubKey, 24);
 
-    var swapAddress = redeemScr.scriptAddress();
+    var swapAddress = redeemScr.scriptAddress('testnet');
     console.log("\n\nScript Address: " + swapAddress);
 
     //Will change over to automated for testing
