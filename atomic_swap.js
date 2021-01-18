@@ -30,7 +30,6 @@ const PublicKey = require('@dashevo/dashcore-lib/lib/publickey');
 const AtomicSwapRedeemScript = require('./lib/AtomicSwapRedeemScript');
 const AtomicSwapRedeemTransaction = require('./lib/AtomicSwapRedeemTransaction');
 const PrivateKey = require('@dashevo/dashcore-lib/lib/privatekey');
-const AtomicSwapUnlockingScript = require('./lib/AtomicSwapUnlockingScript');
 
 (async function main() {
     var participantPubKeyString;
@@ -89,9 +88,7 @@ const AtomicSwapUnlockingScript = require('./lib/AtomicSwapUnlockingScript');
         console.error("Private Key failed - " + error.error);
     }
 
-
     //Now lets get all the information for the initiator
-
 
     await rpc.getnewaddress()
     .then(suc4, fail4);
@@ -129,7 +126,6 @@ const AtomicSwapUnlockingScript = require('./lib/AtomicSwapUnlockingScript');
 
     //Will change over to automated for testing
 
-
     await rpc.sendtoaddress(swapAddress, 10)
     .then(suc6, fail6);
 
@@ -155,19 +151,13 @@ const AtomicSwapUnlockingScript = require('./lib/AtomicSwapUnlockingScript');
     }
 
     var redeemTx = new AtomicSwapRedeemTransaction(
-        swapAddress, fundingTxId, fundingTxOutputIdx, 1000000000-500, toAddress
-    )
-    var sig = redeemTx.getSignature(privKey, redeemScr);
-    console.log("Signature: " + sig.toString());
-
-    let unlockingScript = new AtomicSwapUnlockingScript(secret.secret, redeemScr, sig);
-    redeemTx.inputs[0].setScript(unlockingScript);
+        swapAddress, fundingTxId, fundingTxOutputIdx, 1000000000-500, toAddress, redeemScr
+    ).setSecret(secret.secret)
+     .sign(privKey, secret.secret);   
 
     console.log("Redeem TX: " + redeemTx);
 
-
     //Send the Transaaction
-
     await rpc.sendrawtransaction(redeemTx)
     .then(suc8, fail8);
 

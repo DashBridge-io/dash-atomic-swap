@@ -2,7 +2,7 @@
   "name": "atomic_swap",
   "version": "1.0.0",
   "description": "",
-  "main": "atomic_swap.js",
+  "main": "",
   "scripts": {
     "test": "mocha"
   },
