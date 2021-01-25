@@ -24,4 +24,16 @@ describe('AtomicSwapUnlockingScript', function () {
         unlockingScript.toString().should.contain(redeemScript.toHex(), "unlocking script should include redeem script");
         unlockingScript.toString().should.contain(signatureString, "unlocking script should contain the signature");
     });
+
+    it("should return the secret", function() {
+        let unlockingScript = new atomicSwap.UnlockingScript(secret, redeemScript, { signature: signature });
+        unlockingScript.getSecret().should.equal(secret, "should return the secret");
+    });
+
+    it("should return the secret when constructed from hex", function() {
+        let unlockingScript = atomicSwap.UnlockingScript.fromHex(
+            '473044022039d660abc0c54afaf4e74067f863af70f018c5bc76f2ad9a7a82c4c1fc46aeac022052b38fbe872e815070efc794ce5387a4f10fb35e73229cc56c3db40997bdc25c012015df4318d14d4a42af3ec46f7d8aecd651b643f971968682194f69b99d8fb55a514c7363a820a3c9608a9e3fa42738e79d389d846118487d9e20b7ed25b513d082bf8b55d199882102c19818c96856bb3957a424120d441c2273744b60dbb213def1cbb35cdcca8d56ac6704600648b0b2752102ae786f9b1b5c363bb3b40902b2001fc3283965c735cdc68e55e11aabfb3ab53fac68'
+            );
+        unlockingScript.getSecret().should.equal('15df4318d14d4a42af3ec46f7d8aecd651b643f971968682194f69b99d8fb55a', "Should return the secret");
+    })
 });
