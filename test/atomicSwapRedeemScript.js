@@ -1,20 +1,15 @@
-const dashcore = require('@dashevo/dashcore-lib');
+import dashcore from '@dashevo/dashcore-lib';
 const PublicKey = dashcore.PublicKey;
 const Address = dashcore.Address;
 const { sha256 } = dashcore.crypto.Hash;
 
-const should = require('chai').should();
-const assert = require('chai').assert;
-const sinon = require('sinon');
+import chai from 'chai';
+const should = chai.should();
+const assert = chai.assert;
 
-const atomicSwap = require('../index.js');
+import * as atomicSwap from '../index.js';
 
 describe('AtomicSwapRedeemScript', function () {
-
-  // script includes a time stamp, so we need to freeze time for predictable values
-  var clock = sinon.useFakeTimers({
-    now: 1483228800000
-  });
 
   var pubKeyParticipantString = '0315a66994d646c76278b2c4731448cfbe85c4b09d7fdc7f073246b4985409f1ce';
   var pubKeyInitiatorString = '0315a66994d646c76278b2c4731448cfbe85c4b09d7fdc7f073246b4985409f1ce';
@@ -32,7 +27,7 @@ describe('AtomicSwapRedeemScript', function () {
     const p2shAddress = redeemScript.scriptAddress(dashcore.Networks.testnet);
     assert(Address.isValid(p2shAddress), "Script address should be valid");
     assert(p2shAddress.isPayToScriptHash(), "Script address should be a P2SH address");
-    p2shAddress.toString().should.eql('8yAAP3xhr6Q2CYCDbbWSXs2QNmH3KKaVb1', 'Script address should be correct');
+    p2shAddress.toString().should.eql('8kh7bDnTjLjRBd9skvMqLcxGyG9ZLqZ1QM', 'Script address should be correct');
   });
 
   it('should make a new script with valid string arguments', function () {
@@ -43,7 +38,7 @@ describe('AtomicSwapRedeemScript', function () {
     const p2shAddress = redeemScript.scriptAddress(dashcore.Networks.testnet);
     assert(Address.isValid(p2shAddress), "Script address should be valid");
     assert(p2shAddress.isPayToScriptHash(), "Script address should be a P2SH address");
-    p2shAddress.toString().should.eql('8yAAP3xhr6Q2CYCDbbWSXs2QNmH3KKaVb1', 'Script address should be correct');
+    p2shAddress.toString().should.eql('8kh7bDnTjLjRBd9skvMqLcxGyG9ZLqZ1QM', 'Script address should be correct');
   });
 
 });

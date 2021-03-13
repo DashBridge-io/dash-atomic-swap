@@ -1,8 +1,6 @@
 'use strict';
 
-var atomicSwap = module.exports;
-
-atomicSwap.RedeemScript = require('./lib/AtomicSwapRedeemScript');
-atomicSwap.UnlockingScript = require('./lib/AtomicSwapUnlockingScript');
-atomicSwap.Input = require('./lib/AtomicSwapInput');
-atomicSwap.RedeemTransaction = require('./lib/AtomicSwapRedeemTransaction');
+export { AtomicSwapUnlockingScript as UnlockingScript } from './lib/AtomicSwapUnlockingScript.js';
+export { AtomicSwapInput as Input } from './lib/AtomicSwapInput.js';
+export { AtomicSwapRedeemTransaction as RedeemTransaction } from './lib/AtomicSwapRedeemTransaction.js';
+export { AtomicSwapRedeemScript as RedeemScript } from './lib/AtomicSwapRedeemScript.js';

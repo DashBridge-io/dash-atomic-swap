@@ -1,0 +1,121 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.js"></script>
+    
+
+    <style>
+    
+    </style>
+
+  </head>
+
+    <body>
+      <h1>Ethereum Atomic Swap - Participant</h1>
+      <div id='statusdiv'>Status: <span id='displayer'></span></div>
+          <button id='Redeem'>Redeem</button>
+
+        <script>
+         
+            var contract;
+            try {
+              ethereum.enable();
+            } catch(e) {console.log("FAILED TO ACTIVATE ETHEREUM");}
+            
+            $(document).ready(function(){
+              try {
+                web3 = new Web3(web3.currentProvider);
+              } catch(e) {console.log("FAILED TO ACTIVATE WEB3"); return;}
+
+
+                var adr = "0x36A929b8525cA6f37deB7284E1384709EBa03793";
+                var abi = [
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_refundTime",
+				"type": "uint256"
+			},
+			{
+				"name": "_hashedSecret",
+				"type": "bytes32"
+			},
+			{
+				"name": "_participant",
+				"type": "address"
+			}
+		],
+		"name": "initiate",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_secret",
+				"type": "string"
+			},
+			{
+				"name": "_hashedSecret",
+				"type": "bytes32"
+			}
+		],
+		"name": "redeem",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_hashedSecret",
+				"type": "bytes32"
+			}
+		],
+		"name": "refund",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];
+
+                contract = new web3.eth.Contract(abi, adr);
+                var _secret;
+                var _hashedSecret;
+
+});
+
+            $('#Redeem').click(function(){
+                web3.eth.getAccounts().then(function(accounts){
+                    console.log(accounts);
+                    _secret = prompt("Enter the Secret: ");
+                    _hashedSecret = sha256(_secret);
+                    return contract.methods.redeem(_secret, "0x"+_hashedSecret).send({from:accounts[0]});
+                }).then(function(tx){
+                    $('#displayer').html("Redeem completed with secret: " + _secret);
+                    console.log(tx);
+                }).catch(function(tx){
+                    $('#displayer').html("Error in Redeem. Check log");
+                    if (_secret == null){
+                        _secret = "Not Given";
+                    }
+                    if (_hashedSecret == null){
+                        _hashedSecret = "Failed to be calculated";
+                    }
+                    console.log("Error in Redeem. The secret was: " + _secret + " The hash was: " + "0x"+ _hashedSecret);
+                    console.log(tx);
+                });
+            });
+
+        </script>
+    </body>
+</body>

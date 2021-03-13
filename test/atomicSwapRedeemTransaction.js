@@ -1,14 +1,14 @@
-const dashcore = require('@dashevo/dashcore-lib');
-const Opcode = dashcore.Opcode;
-const { sha256, sha256ripemd160 } = require('@dashevo/dashcore-lib/lib/crypto/hash');
+import dashcore from '@dashevo/dashcore-lib';
+const { Opcode } = dashcore;
+import script from '@dashevo/dashcore-lib/lib/script/script.js';
+const { sha256, sha256ripemd160 } = dashcore.crypto.Hash;
 
-const should = require('chai').should();
-const assert = require('chai').assert;
-const sinon = require('sinon');
+import chai from 'chai';
+const { assert } = chai;
+const should = chai.should();
+import sinon from 'sinon';
 
-const script = require('@dashevo/dashcore-lib/lib/script');
-
-const atomicSwap = require('../index.js');
+import * as atomicSwap from '../index.js';
 
 describe('AtomicSwapRedeemTransaction', function () {
     var pubKeyParticipantString = '035fea736ab0616ee0f7d6e6457fcf134a8cf4895d68782c97c8478ce7b358be73';

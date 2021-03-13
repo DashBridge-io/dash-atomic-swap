@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <script src="jquery-3.5.1.js"></script>
+    <script type="module" src="initiator_redeem.js"></script>
+</head>
+
+<body>
+    <h1>Initiator Redeem Page</h1>
+    <div id="funding-check">
+        <form>
+            <label for="initiator-public-key">Initiator Public Key:</label>
+            <input id="initiator-public-key" type="text" placeholder="Your Public Key" size="72">
+            </br></br>
+            <label for="participant-public-key">Participant Public Key:</label>
+            <input id="participant-public-key" type="text" placeholder="Other Party's Public Key" size="72">
+            </br></br>
+            <label for="secret">Secret:</label>
+            <input id="secret" type="text">
+            </br></br>
+            <input type="submit" value="Check For Funds" id="check-for-funds">
+        </form>
+    </div>
+    <div id="redeem" style="display: none;">
+        <p>
+            Contract has been funded with <span id="funded-amount"></span> DASH.
+        </p>
+        <form>
+            <label for="pay-to-address">Pay To Address:</label>
+            <input id="pay-to-address" type="text">
+        </br></br>
+            <label for="priv-key">Private Key for this Address:</label>
+            <input id="priv-key" type="text">
+            </br></br>
+            <input id="redeem-button" type="submit" value='Redeem'>
+        </form>
+    </div>
+</body>
+
+</html>

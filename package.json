@@ -2,17 +2,34 @@
   "name": "atomic_swap",
   "version": "1.0.0",
   "description": "",
-  "main": "",
+  "main": "./index.js",
+  "type": "module",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "webpack --progress --mode=development",
+    "server": "webpack serve"
   },
+  "files": [
+    "lib"
+  ],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@dashevo/dashcore-lib": "^0.18.15",
-    "@dashevo/dashd-rpc": "2.0.0",
-    "mocha": "^7.2.0",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@dashevo/dashd-rpc": "^2.1.0",
+    "babel-loader": "^8.2.2",
     "chai": "^4.2.0",
-    "sinon": "^4.5.0"
+    "mocha": "^7.2.0",
+    "sinon": "^4.5.0",
+    "ts-loader": "^8.0.14",
+    "typescript": "^4.1.3",
+    "webpack": "^4",
+    "webpack-cli": "^4.4.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "dependencies": {
+    "@dashevo/dashcore-lib": "^0.19.19"
   }
 }
