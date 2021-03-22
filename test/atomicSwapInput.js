@@ -1,13 +1,13 @@
-const dashcore = require('@dashevo/dashcore-lib');
+import dashcore from '@dashevo/dashcore-lib';
 const PublicKey = dashcore.PublicKey;
 const Address = dashcore.Address;
 const { sha256 } = dashcore.crypto.Hash;
 
-const should = require('chai').should();
-const assert = require('chai').assert;
-const sinon = require('sinon');
+import should from 'chai';
+import assert from 'chai';
+import sinon from 'sinon';
 
-const atomicSwap = require('../index.js');
+import * as atomicSwap from '../index.js';
 
 describe('AtomicSwapInput', function () {
 

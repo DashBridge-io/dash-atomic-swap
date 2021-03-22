@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.js"></script>
+    <script src="initiator-create.js"></script>
+    <style>
+        form input {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        img#loading-img {
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Ethereum Atomic Swap - Initiation</h1>
+    <p>
+        As the initiator of the atomic swap, in this case you have Ethereum that you would like to swap for Dash.
+    </p>
+
+    <form>
+        <span>Swap</span> 
+        <input id="swap-amount" type="number" min="0.01" max="10" value="0.01">
+        <span>ETH for DASH w/ recipient at ETH address</span>
+        <input id="participant-address" type="text" size="45">
+
+        <br />
+
+        <span>If funds go unclaimed, a refund allowed after</span>
+        <input type="number" id="refund-time-hours" min="0" max="48" value="48">
+        :
+        <input type="number" id="refund-time-minutes" max="60" min="0" value="00">
+
+        </br>
+
+        <span>Lock funds with secret</span>
+        <input id="secret" type="text">
+        <button id='initiate' type="submit" style="display: block;">Initiate Swap</button>
+    </form>
+
+    <div id='status-div' style="display: none;">
+        <span id='displayer'>Submitting to Ethereum blockchain</span>
+        <img id='loading-img' src="eth-spinner.gif">
+    </div>
+
+    <div id="completion-div" style="display: none;">
+        <p>
+            Smart contract successfully Funded.
+        </p>
+        <p>
+            The hash of your secret is "<span id='secret-hash'></span>". Send this to the participant along with you Dash public key.  
+        </p>
+        <p>
+            Then go to <a href="initiator-redeem.html">this page to redeem your DASH.</a>
+        </p>
+    </div>
+
+    <div id="error-div" style="display: none;">
+        <p>Error submitting contract. Check console log.</p>
+    </div>
+</body>
+
+</html>

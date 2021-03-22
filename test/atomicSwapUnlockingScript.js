@@ -1,11 +1,12 @@
-const dashcore = require('@dashevo/dashcore-lib');
-const Signature = dashcore.crypto.Signature;
+import dashcore from '@dashevo/dashcore-lib';
+const { Signature } = dashcore.crypto;
 
-const should = require('chai').should();
-const assert = require('chai').assert;
-const sinon = require('sinon');
+import chai from 'chai';
+const { assert } = 'chai';
+const should = chai.should();
+import sinon from 'sinon';
 
-const atomicSwap = require('../index.js');
+import * as atomicSwap from '../index.js';
 
 describe('AtomicSwapUnlockingScript', function () {
 

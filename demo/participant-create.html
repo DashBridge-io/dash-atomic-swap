@@ -1,0 +1,61 @@
+<html>
+<script src="jquery-3.5.1.js"></script>
+<script type="module" src="participant_create.js"></script>
+
+<div id="step-one">
+    <h1>Atomic Swap Participant Form</h1>
+
+    <p>
+        This form is used by the atomic swap participant to create their side of the atomic swap transaction.
+    </p>
+
+    <p>
+        The participant is the party that elects to partipate in an atomic swap created by another party (The
+        Initiator).
+    </p>
+
+    <p>
+        In this case, the initiator has Ethereum which they have paid into a contract wishing to exchange for Dash.
+    </p>
+
+    <p>
+        The initiator will have provided their public key to the participant along with a hash of the secret locking the
+        Ethereum into the swap.
+    </p>
+
+    <form>
+        <label for="initiator-public-key">Initiator Public Key:</label>
+        <input id="initiator-public-key" type="text">
+        </br></br>
+        <label for="participant-public-key">Participant Public Key:</label>
+        <input id="participant-public-key" type="text">
+        </br></br>
+        <label for="secret-hash">Hash of Secret:</label>
+        <input id="secret-hash" type="text">
+        </br></br>
+        <input id="create-participant-contract" type="submit">
+    </form>
+</div>
+
+<form id="creation-message" style="display: none;">
+    <h1>Atomic Swap Address Created</h1>
+
+    <p>Pay DASH to Address <strong id="p2sh-address"></strong> to fulfill your part of the swap.</p>
+    <input id="swap-funded" type="submit" value="Done" />
+</form>
+
+<form id='tx-inspection' style="display: none;">
+    <p>Once the initiator has redeemed his DASH, you will be able extract the secret.</p>
+    <input id="inpspect-txn" type="submit" value="Check for redemption" />
+</form>
+
+<div id="secret-reveal" style="display: none;">
+    <p>
+        DASH has been withdrawn using secret: <span id="secret">f</span>.
+    </p>
+    <p>
+        Use that secret to <a href="participant-redeem.html">withdraw your Ethereum</a>.
+    </p>
+</div>
+
+</html>
