@@ -41,7 +41,9 @@ $(function () {
 
     $('#redeem-button').on('click', async function (e) {
         e.preventDefault();
-        await createTransaction();
+        const resp = await createTransaction();
+        $('#txid').html(resp.result);
+        $('#success').show();
     });
 
     async function createTransaction() {
@@ -59,6 +61,6 @@ $(function () {
             redeemScript
         ).setSecret(secret).sign(privKey); 
         
-       await rt.submitViaRPC(rpc);
+       return await rt.submitViaRPC(rpc);
     }
 });

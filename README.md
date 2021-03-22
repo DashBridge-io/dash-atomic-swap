@@ -1,3 +1,11 @@
+<style>
+    img {
+        margin-left: 5em;
+        width: 60%;
+        padding: 2em
+    }
+</style>
+
 # dash-atomic-swap
 
 Library for creating atomic swaps transactions on the Dash blockchain
@@ -126,13 +134,73 @@ Demo app will them be available at http://localhost:8080/
 
 ## Performing The Swap
 
-    1. The initiator creates the first part of the swap
+1. The initiator creates the first part of the swap
 
-        The initiator begins the swap by going to http://localhost:8080/initiator-create.html and locking some ether in a smart contract using a secret. 
+    The initiator begins the swap by going to http://localhost:8080/initiator-create.html and locking some ether in a smart contract using a secret. They will then send the hash of that secret along and their Dash public key to the participant. 
 
-![demo initiate](doc/img/demo_initiate.gif)
+![Swap Initiation page](doc/img/demo_initiate.gif)
 
 
+2. The participant will then go to http://localhost:8080/participant-create.html to create their half of the swap using their public key and the secret hash and public key that was sent to them by the initiator. 
+
+![Participant Create page](doc/img/participant_create.png)
+
+3. After clicking submit, the P2SH address for the swap will be revealed to the participant.
+
+![P2SH address reveal page](doc/img/participant_create_pt2.png)
+
+4. The partcipant will then need to send the agreed amount of Dash to that address. For the sake of this example, this can be done on the command line:
+
+    ```
+    $ ./dash-cli -regtest sendtoaddress 8hGQar8umTsc9MnGfJM5PiRrMiLrcaGKbQ 1
+    
+        6c6153ea5391f02cc6aff7fc5ab6e3eb66bbda66136f2bff294467bdcd0b18bf
+    ```
+
+    A block must be mined in order to make those funds available:
+
+    ```
+    # ./dash-cli -regtest generate 1
+    
+        [
+            "63f7c9fc2654d7ef4b09c547a8e175cf2aef7d7153c486a098c6dbcf3051814f"
+        ]
+    ```
+5. Now the participant will must wait until the initiator withdraws the funds.
+
+![Participant Waiting Page](doc/img/participant_waiting.png)
+
+6. Now that the participant has locked some Dash into a contract the next step is for the initiator to withdraw it by going to http://localhost:8080/initiator-redeem.html. Doing so will reveal the secret to the participant.
+
+![Initiator Redeem Page](/doc/img/initiator_redeem.png)
+
+7. On this page the initiator can see that funds have been deposited, verify the amount, and enter a destination address and private key to receive them.
+
+![Initiator Withdraw Page](/doc/img/initiator_redeem_pt2.png)
+
+8. After clicking redeem, we can generate another block and verify that the destination address has recevied funds.
+
+```
+        $ ./dash-cli -regtest generate 1
+
+            [
+                "450acf115829174ed0e6924c7ee320a3fa242cc45b43ad3760b1fff4c359f866"
+            ]
+
+        $ ./dash-cli -regtest getaddressbalance '{ "addresses": ["8hGQar8umTsc9MnGfJM5PiRrMiLrcaGKbQ"] }'
+
+            {
+                "balance": 0,
+                "received": 100000000
+            }
+```
+8. Now that the funds have been withdrawn, the transaction can be inspected by the participant and the secret extracted.
+
+![Secret Reveal](doc/img/secret_reveal.png)
+
+9. Now that the participant has the secret, they can go to http://localhost:8080/participant-redeem.html and withdraw their Ethereum.
+
+![Ethereum Withdraw](doc/img/withdraw.gif)
 
 # Local Dash Node
 
