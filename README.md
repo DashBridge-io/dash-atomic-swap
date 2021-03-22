@@ -1,11 +1,3 @@
-<style>
-    img {
-        margin-left: 5em;
-        width: 60%;
-        padding: 2em
-    }
-</style>
-
 # dash-atomic-swap
 
 Library for creating atomic swaps transactions on the Dash blockchain
@@ -140,6 +132,7 @@ Demo app will them be available at http://localhost:8080/
 
 ![Swap Initiation page](doc/img/demo_initiate.gif)
 
+<img src='doc/img/demo_initiate.gif' style="margin-left: 5em;padding: 2em;width: 60%"/>
 
 2. The participant will then go to http://localhost:8080/participant-create.html to create their half of the swap using their public key and the secret hash and public key that was sent to them by the initiator. 
 
