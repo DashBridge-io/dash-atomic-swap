@@ -132,8 +132,6 @@ Demo app will them be available at http://localhost:8080/
 
 ![Swap Initiation page](doc/img/demo_initiate.gif)
 
-<img src='doc/img/demo_initiate.gif' style="margin-left: 5em;padding: 2em;width: 60%"/>
-
 2. The participant will then go to http://localhost:8080/participant-create.html to create their half of the swap using their public key and the secret hash and public key that was sent to them by the initiator. 
 
 ![Participant Create page](doc/img/participant_create.png)
