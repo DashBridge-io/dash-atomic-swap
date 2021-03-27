@@ -29,17 +29,24 @@ $(document).ready(function () {
         $('#step-one').fadeOut();
     });
 
-    $('#swap-funded').on('click', function (e) {
+    $('#swap-funded').on('click', async function (e) {
         e.preventDefault();
-        $('#creation-message').hide();
-        $('#tx-inspection').show();
+        const txns = await getRawTxnsForAddress(redeemScript.scriptAddress('regtest'));
+        const fundingTxn = findFundingTxn(txns);
+        console.log(`funding txn: ${JSON.stringify(fundingTxn)}`);
+        if (fundingTxn === undefined) {
+            alert('Contract does not appear to have been funded yet.');
+        } else {
+            $('#creation-message').hide();
+            $('#tx-inspection').show();
+        }
     });
 
     $('#tx-inspection').on('click', async function (e) {
         e.preventDefault();
         const txns = await getRawTxnsForAddress(redeemScript.scriptAddress('regtest'));
         const spendingTx = findSpendingTxn(txns);
-        if(spendingTx === undefined) {
+        if (spendingTx === undefined) {
             alert('Funds have not yet been withdrawn');
         } else {
             const redeemTx = atomicSwap.RedeemTransaction.fromHex(spendingTx.hex);
@@ -73,6 +80,12 @@ $(document).ready(function () {
         )[0];
     }
 
+    function findFundingTxn(txns) {
+        return txns.filter(
+            txn => isFundingTxn(txn)
+        )[0];
+    }
+
     function isFundingTxn(txn) {
         const fundingOutput = txn.vout.find(
             output => output.scriptPubKey.addresses.includes(
@@ -82,4 +95,4 @@ $(document).ready(function () {
         return fundingOutput != undefined;
     }
 
-});   
+});
