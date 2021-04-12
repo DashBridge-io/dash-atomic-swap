@@ -33,6 +33,10 @@
         <label for="secret-hash">Hash of Secret:</label>
         <input id="secret-hash" type="text">
         </br></br>
+        If funds go unclaimed, they can be refunded after 
+        <input type="number" id="refund-time-hours" min="0" max="48" value="24">
+        :
+        <input type="number" id="refund-time-minutes" max="60" min="0" value="00">
         <input id="create-participant-contract" type="submit">
     </form>
 </div>
@@ -44,9 +48,10 @@
     <input id="swap-funded" type="submit" value="Done" />
 </form>
 
-<form id='tx-inspection' style="display: none;">
+<div id='tx-inspection' style="display: none;">
     <p>Once the initiator has redeemed his DASH, you will be able extract the secret.</p>
-    <input id="inpspect-txn" type="submit" value="Check for redemption" />
+    <input id="inpspect-txn" type="button" value="Check for redemption" />
+    <input id="refund" type="button" value="Get A Refund" />
 </form>
 
 <div id="secret-reveal" style="display: none;">

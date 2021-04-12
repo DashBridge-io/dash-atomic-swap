@@ -9,8 +9,63 @@ $(function () {
         web3 = new Web3(web3.currentProvider);
     } catch (e) { console.log("FAILED TO ACTIVATE WEB3"); return; }
 
-    var adr = "0x36A929b8525cA6f37deB7284E1384709EBa03793";
-    var abi = [
+    var adr = "0xF0a80f8174E7c6283A64ea55153b8851B843eea0";
+    var abi =[
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_secret",
+                    "type": "string"
+                },
+                {
+                    "name": "_hashedSecret",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "redeem",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "_hashedSecret",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "status",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                },
+                {
+                    "name": "",
+                    "type": "int256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_hashedSecret",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "refund",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
         {
             "constant": false,
             "inputs": [
@@ -32,40 +87,8 @@ $(function () {
             "payable": true,
             "stateMutability": "payable",
             "type": "function"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_secret",
-                    "type": "string"
-                },
-                {
-                    "name": "_hashedSecret",
-                    "type": "bytes32"
-                }
-            ],
-            "name": "redeem",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_hashedSecret",
-                    "type": "bytes32"
-                }
-            ],
-            "name": "refund",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
         }
-    ];
+    ]
 
     contract = new web3.eth.Contract(abi, adr);
     var _refundTime; // did this so the error messages can debug information.
@@ -118,25 +141,26 @@ $(function () {
         });
     });
 
-    $('#Refund').click(function () {
+    $('#refund').click(function (e) {
+        e.preventDefault();
         web3.eth.getAccounts().then(function (accounts) {
             console.log(accounts);
-            _secret = prompt("Enter the Secret: ");
+            _secret = $("#secret").val();
             _hashedSecret = sha256(_secret);
-            return contract.methods.refund("0x" + _hashedSecret).send({ from: accounts[0] });
-        }).then(function (tx) {
-            $('#displayer').html("Refund completed with secret: " + _secret);
-            console.log(tx);
-        }).catch(function (tx) {
-            $('#displayer').html("Error in Refund. Check log");
-            if (_secret == null) {
-                _secret = "Not Given";
-            }
-            if (_hashedSecret == null) {
-                _hashedSecret = "Failed to be calculated";
-            }
-            console.log("Error in Refund. The secret was: " + _secret + " The hash was: " + "0x" + _hashedSecret);
-            console.log(tx);
+            return contract.methods.status("0x" + _hashedSecret).call({}).then( function(result) {
+                const [value, timeUntilRefundable] = [result[0], result[1]] 
+                if(timeUntilRefundable > 0) {
+                    alert(`Contract cannot be refunded for ${timeUntilRefundable} seconds.`);
+                    return;
+                } else {
+                    contract.methods.refund("0x" + _hashedSecret).send({ from: accounts[0] }).then(function(tx){
+                        console.log(`Refund transaction ${tx} `);
+                        alert("refund transaction submitteed successfully");
+                    }).catch(function(error){
+                        console.log(`Refund error: ${error}`);
+                    })
+                }
+            });
         });
     });
 });
