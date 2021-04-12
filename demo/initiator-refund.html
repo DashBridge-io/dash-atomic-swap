@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.js"></script>
+    <script src="initiator-create.js"></script>
+    <style>
+        form input {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        img#loading-img {
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Ethereum Atomic Swap - Initiator Refund</h1>
+
+    <form>
+        <label for="secret">Enter the secret</label>
+        <input type="text" id="secret">
+        <button id='refund' type="submit" style="display: block;">Get Refund</button>
+    </form>
+</body>
+
+</html>

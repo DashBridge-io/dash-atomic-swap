@@ -22,7 +22,10 @@ $(document).ready(function () {
         let initiatorPublicKeyString = $('#initiator-public-key').val();
         let participantPublicKeyString = $('#participant-public-key').val();
         let secretHash = $('#secret-hash').val();
-        redeemScript = new atomicSwap.RedeemScript(secretHash, initiatorPublicKeyString, participantPublicKeyString, 24);
+        let refundHours = parseInt($('#refund-time-hours').val());
+        let refundTimeMinutes = parseInt($('#refund-time-minutes').val());
+        refundHours += refundTimeMinutes / 60;
+        redeemScript = new atomicSwap.RedeemScript(secretHash, initiatorPublicKeyString, participantPublicKeyString, refundHours);
         console.log('address: ' + redeemScript.scriptAddress('regtest'));
         $('#p2sh-address').html(redeemScript.scriptAddress('regtest').toString());
         $('#creation-message').fadeIn();
@@ -33,7 +36,6 @@ $(document).ready(function () {
         e.preventDefault();
         const txns = await getRawTxnsForAddress(redeemScript.scriptAddress('regtest'));
         const fundingTxn = findFundingTxn(txns);
-        console.log(`funding txn: ${JSON.stringify(fundingTxn)}`);
         if (fundingTxn === undefined) {
             alert('Contract does not appear to have been funded yet.');
         } else {
@@ -42,7 +44,8 @@ $(document).ready(function () {
         }
     });
 
-    $('#tx-inspection').on('click', async function (e) {
+    $('#inpspect-txn').on('click', async function (e) {
+        console.log('inspecting transaction');
         e.preventDefault();
         const txns = await getRawTxnsForAddress(redeemScript.scriptAddress('regtest'));
         const spendingTx = findSpendingTxn(txns);
@@ -55,6 +58,40 @@ $(document).ready(function () {
             $('#secret').html(secret.toString());
         }
     });
+
+    $('#refund').on('click', async function (e) {
+        e.preventDefault();
+        const toAddress = prompt("Address funds should be returned to?");
+        const privKey = prompt("Enter your private key?");
+        redeemScript.getFundingUTXOs(rpc).then(function (utxos) {
+            if (utxos.length > 0) {
+                const utxoInfo = utxos[0];
+                createRefund(utxoInfo, privKey, toAddress).catch(function (err) {
+                    if (err.message == "non-BIP68-final (code 64)") {
+                        alert("Transaction is not yet eligible for a refund");
+                    } else {
+                        alert(`problem with refund ${JSON.stringify(err)}`);
+                    }
+                });
+            } else {
+                alert('No Funds Yet.');
+            }
+        });
+    });
+
+    async function createRefund(utxoInfo, privKey, toAddress) {
+        console.log(`creating refund txn`);
+        let rt = new atomicSwap.RefundTransaction(
+            redeemScript.scriptAddress(),
+            utxoInfo.txid,
+            utxoInfo.outputIndex,
+            utxoInfo.satoshis - 1000,
+            toAddress,
+            redeemScript
+        ).sign(privKey);
+        console.log(`created refund txn: ${JSON.stringify(rt)}`);
+        return await rt.submitViaRPC(rpc);
+    }
 
     async function getTxnIDsForAddress(address) {
         const resp = await rpc.getaddresstxids({ addresses: [address.toString()] });
