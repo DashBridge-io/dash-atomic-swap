@@ -25,7 +25,10 @@ $(function () {
         let secretHash = Hash.sha256(
             Buffer.from(secret)
         );
-        redeemScript = new atomicSwap.RedeemScript(secretHash, initiatorPublicKeyString, participantPublicKeyString, 24);
+        let refundHours = parseInt($('#refund-time-hours').val());
+        let refundTimeMinutes = parseInt($('#refund-time-minutes').val());
+        refundHours += refundTimeMinutes / 60;
+        redeemScript = new atomicSwap.RedeemScript(secretHash, initiatorPublicKeyString, participantPublicKeyString, refundHours);
         
         redeemScript.getFundingUTXOs(rpc).then(function(utxos) {
             if(utxos.length > 0) {
