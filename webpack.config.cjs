@@ -12,6 +12,7 @@ module.exports = {
         fs: 'empty'
     },
     devServer: {
+        host: '0.0.0.0',
         contentBase: path.join(__dirname, 'demo'),
         proxy: {
             '/': {

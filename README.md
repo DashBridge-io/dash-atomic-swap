@@ -44,18 +44,16 @@ Demo app will them be available at http://localhost:8080/
         The initiator needs some Ether to swap for Dash, so their account will need to have some ether to swap. Copy the initiators address from metamask and go to the [Ropsten faucet](https://faucet.ropsten.be/) to get some ether.
 
    
-
-
 1. Local DASH Network
 
-    The demo application connects to a local Dash node in [regtest mode](https://dashcore.readme.io/docs/core-examples-testing-applications#regtest-mode). 
+    The demo application connects to a local Dash node either in [regtest mode](https://dashcore.readme.io/docs/core-examples-testing-applications#regtest-mode) or connected to [Testnet](https://dashcore.readme.io/docs/core-examples-testing-applications#testnet). The following instructions assume regtest mode.
 
     1. Start your [local dash node](#local-dash-node)
 
-    1. If this is the first time starting the node, you will need to initialize the blockchain so that funds are available.
+    1. If this is the first time starting the node, you will need to initialize the blockchain so that funds are available and generate enough depth to activate the BIP9 softfork.
 
         ```
-        dash-cli -regtest generate 101
+        dash-cli -regtest generate 432
         ```
 
     1. Generate DASH addresses and keys for the two parties in the swap.
@@ -197,6 +195,8 @@ Demo app will them be available at http://localhost:8080/
 
 The demo application needs a local dash node running in [regtest mode](https://dashcore.readme.io/docs/core-examples-testing-applications#regtest-mode). 
 
+**The credentials for accessing the local node need to match those in demo/dash_config.js for running the demo application.**
+
 * Linux
     ```
     > dashd -regtest -daemon
@@ -215,5 +215,5 @@ The demo application needs a local dash node running in [regtest mode](https://d
     Run with 
 
         ```
-        docker run -d -p 19898:19898 -p 19899:19899 -v "$HOME/Library/Application Support/DashCore/dash.conf:/root/.dashcore/dash.conf" atomic_swap
+        docker run -d -p 19898:19898 -p 19899:19899 -v "$HOME/Library/Application Support/DashCore/dash.conf:/root/.dashcore/dash.conf" --name dash_node atomic_swap
     ```

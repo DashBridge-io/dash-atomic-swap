@@ -1,6 +1,5 @@
 import dashcore from '@dashevo/dashcore-lib';
-const PublicKey = dashcore.PublicKey;
-const Address = dashcore.Address;
+const { PublicKey, Address, Networks } = dashcore;
 const { sha256 } = dashcore.crypto.Hash;
 
 import chai from 'chai';
@@ -21,10 +20,10 @@ describe('AtomicSwapRedeemScript', function () {
     const pubKeyInitiator = PublicKey(pubKeyInitiatorString);
     const secretHash = Buffer.from(secretHashString, 'hex');
     
-    const redeemScript = new atomicSwap.RedeemScript(secretHash, pubKeyInitiator, pubKeyParticipant, 12);
+    const redeemScript = new atomicSwap.RedeemScript(secretHash, pubKeyInitiator, pubKeyParticipant, 12, Networks.testnet);
     
     should.exist(redeemScript, "Redeem Script should be created");
-    const p2shAddress = redeemScript.scriptAddress(dashcore.Networks.testnet);
+    const p2shAddress = redeemScript.scriptAddress();
     assert(Address.isValid(p2shAddress), "Script address should be valid");
     assert(p2shAddress.isPayToScriptHash(), "Script address should be a P2SH address");
     p2shAddress.toString().should.eql('8kh7bDnTjLjRBd9skvMqLcxGyG9ZLqZ1QM', 'Script address should be correct');
@@ -32,10 +31,10 @@ describe('AtomicSwapRedeemScript', function () {
 
   it('should make a new script with valid string arguments', function () {
     
-    const redeemScript = new atomicSwap.RedeemScript(secretHashString, pubKeyInitiatorString, pubKeyParticipantString, 12);
+    const redeemScript = new atomicSwap.RedeemScript(secretHashString, pubKeyInitiatorString, pubKeyParticipantString, 12, Networks.testnet);
     
     should.exist(redeemScript, "Redeem Script should be created");
-    const p2shAddress = redeemScript.scriptAddress(dashcore.Networks.testnet);
+    const p2shAddress = redeemScript.scriptAddress();
     assert(Address.isValid(p2shAddress), "Script address should be valid");
     assert(p2shAddress.isPayToScriptHash(), "Script address should be a P2SH address");
     p2shAddress.toString().should.eql('8kh7bDnTjLjRBd9skvMqLcxGyG9ZLqZ1QM', 'Script address should be correct');

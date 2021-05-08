@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha",
-    "build": "webpack --progress --mode=development",
+    "build": "webpack --progress --mode=development --host 0.0.0.0",
     "server": "webpack serve"
   },
   "files": [
