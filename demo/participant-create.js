@@ -1,20 +1,11 @@
 import * as atomicSwap from '../index.js';
 import RpcClient from '@dashevo/dashd-rpc/promise';
-import Transaction from '@dashevo/dashcore-lib/lib/transaction';
+import Networks from '@dashevo/dashcore-lib/lib/networks';
 var Buffer = require('buffer/').Buffer;
+var config = require('./dash_config').config;
 
 $(document).ready(function () {
-
-    var config = {
-        protocol: 'http',
-        user: 'dashUser',
-        pass: 'dashPass',
-        host: 'localhost',
-        port: 8080
-    };
-
     var rpc = new RpcClient(config);
-
     let redeemScript;
 
     $('#create-participant-contract').on('click', function (e) {
@@ -25,16 +16,16 @@ $(document).ready(function () {
         let refundHours = parseInt($('#refund-time-hours').val());
         let refundTimeMinutes = parseInt($('#refund-time-minutes').val());
         refundHours += refundTimeMinutes / 60;
-        redeemScript = new atomicSwap.RedeemScript(secretHash, initiatorPublicKeyString, participantPublicKeyString, refundHours);
-        console.log('address: ' + redeemScript.scriptAddress('regtest'));
-        $('#p2sh-address').html(redeemScript.scriptAddress('regtest').toString());
+        redeemScript = new atomicSwap.RedeemScript(secretHash, initiatorPublicKeyString, participantPublicKeyString, refundHours, Networks.testnet);
+        console.log('address: ' + redeemScript.scriptAddress());
+        $('#p2sh-address').html(redeemScript.scriptAddress().toString());
         $('#creation-message').fadeIn();
         $('#step-one').fadeOut();
     });
 
     $('#swap-funded').on('click', async function (e) {
         e.preventDefault();
-        const txns = await getRawTxnsForAddress(redeemScript.scriptAddress('regtest'));
+        const txns = await getRawTxnsForAddress(redeemScript.scriptAddress());
         const fundingTxn = findFundingTxn(txns);
         if (fundingTxn === undefined) {
             alert('Contract does not appear to have been funded yet.');
@@ -47,7 +38,7 @@ $(document).ready(function () {
     $('#inpspect-txn').on('click', async function (e) {
         console.log('inspecting transaction');
         e.preventDefault();
-        const txns = await getRawTxnsForAddress(redeemScript.scriptAddress('regtest'));
+        const txns = await getRawTxnsForAddress(redeemScript.scriptAddress());
         const spendingTx = findSpendingTxn(txns);
         if (spendingTx === undefined) {
             alert('Funds have not yet been withdrawn');
@@ -126,7 +117,7 @@ $(document).ready(function () {
     function isFundingTxn(txn) {
         const fundingOutput = txn.vout.find(
             output => output.scriptPubKey.addresses.includes(
-                redeemScript.scriptAddress('regtest').toString()
+                redeemScript.scriptAddress().toString()
             )
         );
         return fundingOutput != undefined;

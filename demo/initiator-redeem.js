@@ -2,20 +2,13 @@ import * as atomicSwap from '../index.js';
 var Buffer = require('buffer/').Buffer;
 import RpcClient from '@dashevo/dashd-rpc/promise';
 import Hash from '@dashevo/dashcore-lib/lib/crypto/hash';
+import Networks from '@dashevo/dashcore-lib/lib/networks';
+var config = require('./dash_config').config;
 
 $(function () {
-
-    var config = {
-        protocol: 'http',
-        user: 'dashUser',
-        pass: 'dashPass',
-        host: 'localhost',
-        port: 8080
-    };
-
     const rpc = new RpcClient(config);
     let redeemScript = null;
-    let utxoInfo = null
+    let utxoInfo = null;
 
     $('#check-for-funds').on('click', async function(e) {
         e.preventDefault();
@@ -28,7 +21,7 @@ $(function () {
         let refundHours = parseInt($('#refund-time-hours').val());
         let refundTimeMinutes = parseInt($('#refund-time-minutes').val());
         refundHours += refundTimeMinutes / 60;
-        redeemScript = new atomicSwap.RedeemScript(secretHash, initiatorPublicKeyString, participantPublicKeyString, refundHours);
+        redeemScript = new atomicSwap.RedeemScript(secretHash, initiatorPublicKeyString, participantPublicKeyString, refundHours, Networks.testnet);
         
         redeemScript.getFundingUTXOs(rpc).then(function(utxos) {
             if(utxos.length > 0) {
