@@ -71,10 +71,9 @@ Demo app will them be available at http://localhost:8080/
             2. Get the public key for this address
 
                 ```
-                ./dash-cli -regtest validateaddress yYu94PDiVRfpShg6pHrtQuPQT7fMno4eir
+                ./dash-cli -regtest getaddressinfo yYu94PDiVRfpShg6pHrtQuPQT7fMno4eir
 
                 {
-                  "isvalid": true,
                   "address": "yYu94PDiVRfpShg6pHrtQuPQT7fMno4eir",
                   "scriptPubKey": "76a9148a00cd4114044918a5e9a53233a75b1c96a76d0488ac",
                   "ismine": true,
@@ -82,8 +81,13 @@ Demo app will them be available at http://localhost:8080/
                   "isscript": false,
                   "pubkey": "0221266b461ea89ac79e281769f4ba58e4f07c99ce83ce889d7b6c5795141aaf8c",
                   "iscompressed": true,
-                  "account": "",
-                  "timestamp": 1612667597
+                  "timestamp": 1612667597,
+                  "labels": [
+                    {
+                      "name": "",
+                      "purpose": "receive"
+                    }
+                  ]
                 }
                 ```
 
@@ -102,10 +106,9 @@ Demo app will them be available at http://localhost:8080/
 
                         yXTPRzbFyXEA8VdbY8pohEYfw8T6QxeAsZ
 
-                    $ ./dash-cli -regtest validateaddress yXTPRzbFyXEA8VdbY8pohEYfw8T6QxeAsZ
+                    $ ./dash-cli -regtest getaddressinfo yXTPRzbFyXEA8VdbY8pohEYfw8T6QxeAsZ
 
                         {
-                          "isvalid": true,
                           "address": "yXTPRzbFyXEA8VdbY8pohEYfw8T6QxeAsZ",
                           "scriptPubKey": "76a9147a29dbce092e5a39453fd78725d91c859497faf388ac",
                           "ismine": true,
@@ -113,8 +116,13 @@ Demo app will them be available at http://localhost:8080/
                           "isscript": false,
                           "pubkey": "034f4efc53df942eb88e06e7ec5351a463a77003b24d6387b83a9033897ba0c9fa",
                           "iscompressed": true,
-                          "account": "",
-                          "timestamp": 1612667597
+                          "timestamp": 1612667597,
+                          "labels": [
+                            {
+                              "name": "",
+                              "purpose": "receive"
+                            }
+                          ]
                         }
 
                     $ ./dash-cli -regtest dumpprivkey yXTPRzbFyXEA8VdbY8pohEYfw8T6QxeAsZ
