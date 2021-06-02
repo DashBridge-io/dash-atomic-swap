@@ -207,7 +207,7 @@ The demo application needs a local dash node running in [regtest mode](https://d
 
 * Linux
     ```
-    > dashd -regtest -daemon
+    > dashd -regtest -daemon -addressindex
     Dash Core server starting
     ```
 * MacOS
